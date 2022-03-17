@@ -8,7 +8,7 @@
 //player variables
 var playerName = window.prompt("What is your robot's name?");
 var playerHealth = 100;
-var playerAttack = 10;
+var playerAttack = 25;
 var playerMoney = 10;
 
 //enemy variables
@@ -39,13 +39,13 @@ var fight = function(enemyName) {
     //Player attacks enemy
         enemyHealth = enemyHealth - playerAttack;
         console.log (
-            playerName + "attacked" + enemyNames + "." + enemyNames + "now has " + enemyHealth + " health remaining."
+            playerName + " attacked " + enemyNames + "." + enemyNames + " now has " + enemyHealth + " health remaining."
         );
 
     
     //check enemy health
         if (enemyHealth <= 0) {
-            window.alert(enemyNames + "has died!");
+            window.alert(enemyNames + " has died!");
             playerMoney = playerMoney + 20;
             break;
         
@@ -57,13 +57,13 @@ var fight = function(enemyName) {
     //Enemy attacks player
         playerHealth = playerHealth - enemyAttack;
         console.log (
-            enemyNames + "attacked" + playerName + "." + playerHealth + "now has " + playerHealth + " health remaining."
+            enemyNames + " attacked " + playerName + "." + playerHealth + " now has " + playerHealth + " health remaining."
         );
 
 
     //check player health
         if (playerHealth <= 0) {
-            window.alert(playerName + "has died!");
+            window.alert(playerName + " has died!");
             break;
 
         } else {
@@ -80,12 +80,20 @@ var startGame = function() {
     playerAttack = 10;
     playerMoney = 10;
 
-for(var i = 0; i < enemyNames.length; i++) {
+for (var i = 0; i < enemyNames.length; i++) {
     if (playerHealth > 0) {
         window.alert("Welcome to Robot Gladiators! Round " + ( i + 1 ) );
         var pickedEnemyName = enemyNames[i];
         enemyHealth = 50;
         fight(pickedEnemyName);
+
+        if (playerHealth > 0 && i < enemyNames.lenth - 1) {
+            var storeConfirm = window.confirm("The fight is over, visit the store before the next round?")
+            
+            if (storeConfirm) {
+                shop();
+            }
+        }
     }
     else {
         window.alert("You have lost your robot in battle! Game Over!");
@@ -97,20 +105,68 @@ for(var i = 0; i < enemyNames.length; i++) {
 };
 
 var endGame = function() {
+    window.alert("The game has now ended. Let's see how you did!")
     if (playerHealth > 0) {
         window.alert("Great job, you've survived the game! You now have a score " + playerMoney + ".");
     }
     else {
-        window.alert("The game has now ended. Let's see how you did!");
+        window.alert("You've lsot your robot in battle!");
     }
 
     var playAgainConfirm = window.confirm("Would you like to play again?");
 
-    if(playAgainConfirm) {
+    if (playAgainConfirm) {
         startGame();
     }
     else {
         window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+    }
+};
+
+var shop = function() {
+    var shopOptionPrompt = window.prompt(
+        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+    );
+
+    switch (shopOptionPrompt) {
+        case "REFILL":
+        case "refill":
+            if (playerMoney >= 7) {
+                window.alert("Refilling player's health by 20 for 7 dollars.");
+
+                playerHealth = playerHealth + 20;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+            
+            break;
+
+
+        case "UPGRADE":
+        case "upgrade":
+            if (playerMoney >= 7) {
+                window.alert("Upgrading player's attack by 6 for 7 dollars.");
+
+                playerAttack = playerAttack + 6;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+
+            break;
+
+        case "LEAVE":
+        case "leave":
+                window.alert("Leaving the store.");
+                break;
+
+        default:
+            window.alert("You did not pick a valid option. Try again.");
+            shop();
+            break;
     }
 };
 
