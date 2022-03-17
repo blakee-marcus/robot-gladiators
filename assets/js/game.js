@@ -5,26 +5,42 @@ var randomNumber = function(min, max) {
     return value;
 };
 
+var fightOrSkip = function() {
+    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? ");
+    
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
 
-// fight function start
-var fight = function(enemy) {
-    while(playerInfo.health > 0 && enemy.health > 0) {
-       
-    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT'or 'SKIP' to choose");
-    
-    
+    promptFight = promptFight.toLowerCase();
+
     //player choses to skip  
         if (promptFight === "skip" || promptFight === "SKIP") {
             var confirmSkip = window.confirm("Are you sure you'd like to quit?");
 
+            //if confirmed, leave fight
             if (confirmSkip) {
                 window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+                //take money from player
                 playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money)
-                break;
+
+                //return true if player wants to leave
+                return true;
             }
         }
+}
 
+// fight function start
+var fight = function(enemy) {
+    while(playerInfo.health > 0 && enemy.health > 0) {
+        
+        //ask if they want to skip using fightorskip function
+        if (fightOrSkip() ) {
+            //if true leave fight
+            break;
+        }
+    
     //Player attacks enemy
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
@@ -148,7 +164,7 @@ var shop = function() {
 };
 
 
-var getPlayerName() = function() {
+var getPlayerName = function() {
     var name = "";
 
     while (name === "" || name === null) {
